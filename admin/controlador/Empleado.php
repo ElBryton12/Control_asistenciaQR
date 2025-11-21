@@ -1,65 +1,151 @@
 <?php
-require_once "../modelos/Empleado.php"; //Sse incluye el archivo que contiene la clase de Empleado
+/**
+ * Controlador de Empleado
+ * Ubicación: admin/controlador/Empleado.php
+ */
 
-$empleado = new Empleado(); //Se instancia un objeto de la clase Empleado
+require_once "../modelos/Empleado.php";
 
-//Se obtienen los datos del formulario y se limpian para evitar inyeccion de codigo
-$empleado_id = isset($_POST["empleado_id"]) ? limpiarCadena($_POST["empleado_id"]) : "";
-$nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
-$apellidos = isset($_POST["apellidos"]) ? limpiarCadena($_POST["apellidos"]) : "";
-$documento_numero = isset($_POST["documento_numero"]) ? limpiarCadena($_POST["documento_numero"]) : "";
-$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
-$codigo = isset($_POST["codigo"]) ? limpiarCadena($_POST["codigo"]) : "";
+$empleado = new Empleado();
 
-//Se ejecuta unb switch para determinar la accion a realizar segun el parametro 'op' enviado por GET
-switch ($_GET["op"]) {
-    case 'guardaryeditar': //Caso para guardar o editar un empleado
-        if (empty($empleado_id)) { //Si el ID del empleado esta vacio, se inserta un nuevo empleado 
-            $rspta = $empleado->insertar($nombre, $apellidos, $documento_numero, $telefono, $codigo);
-            echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar  los datos";
-        } else { //Si el ID del empleado no esta vacio, se edita un empleado existente
-            $rspta = $empleado->editar($empleado_id, $nombre, $apellidos, $documento_numero, $telefono, $codigo);
-            //Se devuelve un mensaje segun el resultado de la operacion
-            echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
+// Capturar operación
+$op = isset($_GET["op"]) ? limpiarCadena($_GET["op"]) : "";
+
+switch ($op) {
+    
+    case 'guardaryeditar':
+        // Capturar datos del formulario
+        $empleado_id = isset($_POST["empleado_id"]) ? limpiarCadena($_POST["empleado_id"]) : "";
+        $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
+        $apellidos = isset($_POST["apellidos"]) ? limpiarCadena($_POST["apellidos"]) : "";
+        $documento_numero = isset($_POST["documento_numero"]) ? limpiarCadena($_POST["documento_numero"]) : "";
+        $telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
+        
+        if (empty($empleado_id)) {
+            // INSERTAR nuevo empleado (se genera QR automáticamente)
+            $rspta = $empleado->insertar($nombre, $apellidos, $documento_numero, $telefono);
+            echo $rspta ? "Empleado registrado correctamente con código QR" : "No se pudo registrar el empleado";
+        } else {
+            // EDITAR empleado existente
+            $rspta = $empleado->editar($empleado_id, $nombre, $apellidos, $documento_numero, $telefono);
+            echo $rspta ? "Empleado actualizado correctamente" : "No se pudo actualizar el empleado";
         }
         break;
-    
-    case 'mostrar': //Caso para mostrar los datos de un empleado especifico
-        $rspta = $empleado->mostrar($empleado_id); 
-        echo json_encode($rspta); //Se devuelve la respuesta en formato JSON
+
+    case 'eliminar':
+        $empleado_id = limpiarCadena($_GET["id"]);
+        $rspta = $empleado->eliminar($empleado_id);
+        echo $rspta ? "Empleado eliminado correctamente" : "No se pudo eliminar el empleado";
         break;
 
-    case 'listar': //Caso para listar todos los empleados
-        $rspta = $empleado->listar(); 
-        $data = Array(); //Se crea un array para almacenar los datos de los empleados 
-    
-        while ($reg = $rspta->fetch_object()) { //Se recorre el resultado de la consulta
-            $data[] = array( //Se almacenan los datos de cada empoleado al array
-                "0" => '<button class="btn btn-warning" onclick="mostrar(' . $reg->id . ')"><i class="fa fa-pencil"></i></button>',
-                "1" => $reg->nombre,
-                "2" => $reg->apellidos,
-                "3" => $reg->documento_numero,
-                "4" => $reg->telefono,
-                "5" => $reg->codigo,
+    case 'mostrar':
+        $empleado_id = limpiarCadena($_GET["id"]);
+        $rspta = $empleado->mostrar($empleado_id);
+        echo json_encode($rspta);
+        break;
+
+    case 'listar':
+        $rspta = $empleado->listar();
+        $data = Array();
+
+        while ($reg = $rspta->fetch_object()) {
+            $data[] = array(
+                "0" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->id . ')"><i class="fa fa-pencil"></i></button>' .
+                       ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->id . ')"><i class="fa fa-trash"></i></button>' .
+                       ' <button class="btn btn-info btn-sm" onclick="verQR(' . $reg->id . ')"><i class="fa fa-qrcode"></i></button>',
+                "1" => $reg->nombre . ' ' . $reg->apellidos,
+                "2" => $reg->documento_numero,
+                "3" => $reg->telefono,
+                "4" => '<span class="badge bg-primary">' . $reg->codigo . '</span>',
+                "5" => !empty($reg->imagen_qr) 
+                       ? '<img src="../files/qrcodes/' . $reg->imagen_qr . '" height="60px" style="cursor:pointer;" onclick="verQRGrande(\'' . $reg->imagen_qr . '\', \'' . $reg->nombre . ' ' . $reg->apellidos . '\')">'
+                       : '<span class="label label-warning">Sin QR</span>',
+                "6" => !empty($reg->imagen_qr)
+                       ? '<a href="../files/qrcodes/' . $reg->imagen_qr . '" download="QR_' . $reg->nombre . '.png" class="btn btn-success btn-xs"><i class="fa fa-download"></i></a> ' .
+                         '<button class="btn btn-primary btn-xs" onclick="imprimirQR(\'' . $reg->imagen_qr . '\', \'' . $reg->nombre . ' ' . $reg->apellidos . '\')"><i class="fa fa-print"></i></button>'
+                       : '<button class="btn btn-warning btn-xs" onclick="regenerarQR(' . $reg->id . ')"><i class="fa fa-refresh"></i> Generar</button>'
             );
         }
-        
-        //Se crea un array con la infomracion necesaria para el datatables
+
         $results = array(
-            "sEcho" => 1, //Informacion para el datatables
-            "iTotalRecords" => count($data), //Enviamos el total de registros al datatables
-            "iTotalDisplayRecords" => count($data), //Enviamos el total de registros a visualizar
-            "aaData" => $data //Los datos de los empleados para Datatables
+            "sEcho" => 1,
+            "iTotalRecords" => count($data),
+            "iTotalDisplayRecords" => count($data),
+            "aaData" => $data
         );
-        echo json_encode($results); //Se devuelve la respuesta en formato JSON
+
+        echo json_encode($results);
         break;
 
-    case 'select_empleado': //Caso para generar un select conla lista de empleados
-        $rspta = $empleado->select(); //Se llama al metodo select de la clase Empleado
-        
-        //Se crea un array para almacenar los datos de los empleados
-        while ($reg = $rspta->fetch_object()) { //Se recorre el resultado de la consulta
-            echo '<option value=' . $reg->id . '>' . $reg->nombre . ' ' . $reg->apellidos .  '</option>'; //Se generan las opciones del select
+    case 'selectEmpleado':
+        $rspta = $empleado->select();
+        echo '<option value="">Seleccione</option>';
+        while ($reg = $rspta->fetch_object()) {
+            echo '<option value=' . $reg->id . '>' . $reg->nombre_completo . '</option>';
         }
         break;
+
+    case 'regenerarQR':
+        $empleado_id = limpiarCadena($_GET["id"]);
+        $rspta = $empleado->regenerarQR($empleado_id);
+        echo $rspta ? "Código QR regenerado correctamente" : "No se pudo regenerar el código QR";
+        break;
+
+    case 'buscarPorCodigo':
+        // Para el sistema de lectura de QR
+        $codigo = limpiarCadena($_GET["codigo"]);
+        $rspta = $empleado->buscarPorCodigo($codigo);
+        echo json_encode($rspta);
+        break;
+
+    case 'estadisticas':
+        $rspta = $empleado->obtenerEstadisticas();
+        echo json_encode($rspta);
+        break;
+
+    case 'generarQRMasivo':
+        // Generar QRs para todos los empleados que no tienen
+        $generados = $empleado->generarQRMasivo();
+        echo json_encode([
+            'success' => true,
+            'generados' => $generados,
+            'mensaje' => "Se generaron $generados códigos QR correctamente"
+        ]);
+        break;
+
+        case 'registrar_public':
+        // Registro de empleado desde la parte pública (inicio)
+        $nombre           = isset($_POST["nombre"])           ? limpiarCadena($_POST["nombre"])           : "";
+        $apellidos        = isset($_POST["apellidos"])        ? limpiarCadena($_POST["apellidos"])        : "";
+        $documento_numero = isset($_POST["documento_numero"]) ? limpiarCadena($_POST["documento_numero"]) : "";
+        $telefono         = isset($_POST["telefono"])         ? limpiarCadena($_POST["telefono"])         : "";
+
+        // Insertar empleado (el modelo genera código y QR)
+        $idempleado = $empleado->insertar($nombre, $apellidos, $documento_numero, $telefono);
+
+        if ($idempleado) {
+            // Obtenemos datos completos (incluye codigo e imagen_qr)
+            $emp = $empleado->mostrar($idempleado);
+
+            echo json_encode([
+                "ok"        => true,
+                "mensaje"   => "Empleado registrado correctamente",
+                "id"        => $idempleado,
+                "nombre"    => $emp["nombre"] . " " . $emp["apellidos"],
+                "codigo"    => $emp["codigo"],
+                "imagen_qr" => $emp["imagen_qr"]
+            ]);
+        } else {
+            echo json_encode([
+                "ok"      => false,
+                "mensaje" => "No se pudo registrar el empleado"
+            ]);
+        }
+        break;
+
+
+    default:
+        echo "Operación no válida";
+        break;
 }
+?>

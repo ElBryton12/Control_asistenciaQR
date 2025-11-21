@@ -1,9 +1,9 @@
-<footer class="main-footer">
-  <div class="pull-right hidden-xs">
-    <b>Version</b> 1.0
-  </div>
-  <strong>Copyright © 2025 <a href="https://github.com/ElBryton12">Brayan De Jesús Castillo</a>.</strong> Todos los derechos reservados.
-</footer>
+<!-- Aquí empieza el footer.php -->
+<!-- Cada página debe cerrar su propio </div> del main-content antes de incluir este footer -->
+
+</div><!-- /.container -->
+
+
 
 <!-- jQuery 3 -->
 <script src="../public/js/jquery-3.1.1.min.js"></script>
@@ -27,6 +27,8 @@
 <!-- Select -->
 <script src="../public/js/bootstrap-select.min.js"></script>
 
-</body>
+<!-- Modern Sidebar Script -->
+<script src="../public/js/modern-sidebar.js"></script>
 
+</body>
 </html>

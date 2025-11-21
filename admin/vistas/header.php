@@ -1,141 +1,174 @@
-<!DOCTYPE html>
-<html>
+<?php
+//Activamos almacenamiento en el buffer 
+ob_start();
 
+// Verificar si la sesión ya está iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['nombre'])) {
+    header("Location: login.html");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Proyecto QR</title>
-  <!-- Tell the browser to be responsive to screen width -->
+  <title>Proyecto QR - Sistema de Asistencia</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="../public/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../public/css/font-awesome.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../public/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../public/css/_all-skins.min.css">
-  <link rel="apple-touch-icon" href="../public/img/apple-touch-icon.png">
-  <link rel="shortcut icon" href="../public/img/favicon.ico">
-
+  
   <!-- DATATABLES -->
   <link rel="stylesheet" type="text/css" href="../public/datatables/jquery.dataTables.min.css">
   <link href="../public/datatables/buttons.dataTables.min.css" rel="stylesheet" />
   <link href="../public/datatables/responsive.dataTables.min.css" rel="stylesheet" />
-
   <link rel="stylesheet" type="text/css" href="../public/css/bootstrap-select.min.css">
-
+  
+  <!-- Modern Sidebar Styles -->
+  <link rel="stylesheet" href="../public/css/modern-sidebar.css">
+  
+  <link rel="apple-touch-icon" href="../public/img/apple-touch-icon.png">
+  <link rel="shortcut icon" href="../public/img/favicon.ico">
+  
+  <!-- Script crítico para prevenir flash de tema claro -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem("theme");
+      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const shouldUseDarkTheme = savedTheme ? savedTheme === "dark" : systemPrefersDark;
+      
+      if (shouldUseDarkTheme) {
+        document.documentElement.classList.add("dark-theme");
+      }
+    })();
+  </script>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
-  <div class="wrapper">
+<body>
+  <!-- Site navigation bar (Mobile) -->
+  <nav class="site-nav">
+    <button class="sidebar-toggle">
+      <span class="material-symbols-rounded">menu</span>
+    </button>
+    <div class="site-nav-title">
+      <span><b>APP</b> QR</span>
+    </div>
+    <div class="site-nav-user">
+      <img src="../files/usuarios/<?php echo $_SESSION['imagen']; ?>" alt="<?php echo htmlspecialchars($_SESSION['nombre']); ?>">
+    </div>
+  </nav>
 
-    <header class="main-header">
-      <!-- Logo -->
-      <a href="#" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>A</b> M</span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>APP</b>QR</span>
-      </a>
-      <!-- Header Navbar: style can be found in header.less -->
-      <nav class="navbar navbar-static-top">
-        <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-          <span class="sr-only">Navegación</span>
-        </a>
+  <div class="container">
+    <!-- Modern Sidebar -->
+    <aside class="sidebar collapsed">
+      <!-- Sidebar header -->
+      <header class="sidebar-header">
+        <img src="../files/usuarios/<?php echo $_SESSION['imagen']; ?>" alt="<?php echo htmlspecialchars($_SESSION['nombre']); ?>" class="header-logo">
+        <button class="sidebar-toggle">
+          <span class="material-symbols-rounded">chevron_left</span>
+        </button>
+      </header>
 
-        <div class="navbar-custom-menu">
-          <ul class="nav navbar-nav">
+      <div class="sidebar-content">
 
-            <li class="dropdown user user-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="../files/usuarios/<?php echo $_SESSION['imagen']?>" class="user-image" alt="User Image">
-                <span class="hidden-xs"><?php echo $_SESSION['nombre']?></span>
-              </a>
-              <ul class="dropdown-menu">
-                <!-- User image -->
-                <li class="user-header">
-                  <img src="../files/usuarios/<?php echo $_SESSION['imagen']?>" class="img-circle" alt="User Image">
-
-                  <p>
-                    Dllo. de Apps Móviles - Brayan De Jesús Castillo
-                    <small>2025</small>
-                  </p>
-                </li>
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat">Perfil</a>
-                  </div>
-                  <div class="pull-right">
-                    <a href="../controlador/Usuario.php?op=salir" class="btn btn-default btn-flat">Salir</a>
-                  </div>
-                </li>
-              </ul>
-            </li>
-            <!-- Control Sidebar Toggle Button -->
-
-          </ul>
-        </div>
-      </nav>
-    </header>
-    <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-      <!-- sidebar: style can be found in sidebar.less -->
-      <section class="sidebar">
-        <!-- Sidebar user panel -->
-
-        <!-- /.search form -->
-        <!-- sidebar menu: : style can be found in sidebar.less -->
-        <ul class="sidebar-menu" data-widget="tree">
-
-
-          <li><a href="../vistas/escritorio.php"><i class="fa  fa-dashboard (alias)"></i> <span>Escritorio</span></a>
-          </li>
-
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-list"></i> <span>Asistencia</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+        
+        <!-- Menu list -->
+        <ul class="menu-list">
+          <li class="menu-item">
+            <a href="escritorio.php" class="menu-link" data-page="escritorio">
+              <span class="material-symbols-rounded">dashboard</span>
+              <span class="menu-label">Escritorio</span>
             </a>
-            <ul class="treeview-menu">
-              <li><a href="asistencia.php"><i class="fa fa-circle-o"></i> Asistencias</a></li>
-              <li><a href="rptasistencia.php"><i class="fa fa-circle-o"></i> Reportes</a></li>
-            </ul>
           </li>
-
-
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-users"></i> <span>Empleados</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+          
+          <li class="menu-item">
+            <a href="asistencia.php" class="menu-link" data-page="asistencia">
+              <span class="material-symbols-rounded">fact_check</span>
+              <span class="menu-label">Asistencias</span>
             </a>
-            <ul class="treeview-menu">
-              <li><a href="empleado.php"><i class="fa fa-circle-o"></i> Empleado</a></li>
-            </ul>
           </li>
 
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-lock"></i> <span>Usuarios</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+            <!-- 🔹 Nuevo botón para el ESCÁNER -->
+          <li class="menu-item">
+            <a href="../../vistas/asistencia.php" class="menu-link" data-page="scanner">
+              <span class="material-symbols-rounded">qr_code_scanner</span>
+              <span class="menu-label">Escáner</span>
             </a>
-            <ul class="treeview-menu">
-              <li><a href="usuario.php"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-            </ul>
           </li>
-
-          <li><a target="_blank" href="https://github.com/ElBryton12"><i class="fa fa-github"></i>
-              <span>GITHUB</span><small class="label pull-right bg-yellow">web</small></a></li>
+          
+          <li class="menu-item">
+            <a href="rptasistencia.php" class="menu-link" data-page="rptasistencia">
+              <span class="material-symbols-rounded">insert_chart</span>
+              <span class="menu-label">Reportes</span>
+            </a>
+          </li>
+          
+          <li class="menu-item">
+            <a href="empleado.php" class="menu-link" data-page="empleado">
+              <span class="material-symbols-rounded">group</span>
+              <span class="menu-label">Empleados</span>
+            </a>
+          </li>
+          
+          <li class="menu-item">
+            <a href="usuario.php" class="menu-link" data-page="usuario">
+              <span class="material-symbols-rounded">lock</span>
+              <span class="menu-label">Usuarios</span>
+            </a>
+          </li>
+          
+          <li class="menu-item">
+            <a href="https://github.com/ElBryton12/Control_asistenciaQR" target="_blank" class="menu-link">
+              <span class="material-symbols-rounded">code</span>
+              <span class="menu-label">GitHub</span>
+            </a>
+          </li>
         </ul>
-      </section>
-      <!-- /.sidebar -->
+
+        <!-- User Info Section -->
+        <div class="sidebar-user-info">
+          <div class="user-info-content">
+            <img src="../files/usuarios/<?php echo $_SESSION['imagen']; ?>" alt="Usuario" class="user-avatar">
+            <div class="user-details">
+              <span class="user-name"><?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+              <span class="user-role">Administrador</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar footer -->
+      <div class="sidebar-footer">
+        <button class="theme-toggle">
+          <div class="theme-label">
+            <span class="theme-icon material-symbols-rounded">dark_mode</span>
+            <span class="theme-text">Modo Oscuro</span>
+          </div>
+          <div class="theme-toggle-track">
+            <div class="theme-toggle-indicator"></div>
+          </div>
+        </button>
+        
+        <a href="../controlador/Usuario.php?op=salir" class="logout-btn">
+          <span class="material-symbols-rounded">logout</span>
+          <span class="logout-text">Cerrar Sesión</span>
+        </a>
+      </div>
     </aside>
+    
+    <!-- Aquí termina el header.php -->
+    <!-- Cada página debe abrir su propio <div class="main-content"> -->
