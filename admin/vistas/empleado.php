@@ -38,7 +38,7 @@ if (!isset($_SESSION['nombre'])) {
               <thead>
                 <th>Opciones</th>           <!-- 0: botones -->
                 <th>Nombre</th>             <!-- 1: nombre completo -->
-                <th>Documento</th>          <!-- 2 -->
+                <th>Matrícula</th>          <!-- 2 -->
                 <th>Teléfono</th>           <!-- 3 -->
                 <th>Código</th>             <!-- 4 -->
                 <th>QR</th>                 <!-- 5: imagen QR -->
@@ -49,7 +49,7 @@ if (!isset($_SESSION['nombre'])) {
               <tfoot>
                 <th>Opciones</th>
                 <th>Nombre</th>
-                <th>Documento</th>
+                <th>Matrícula</th>
                 <th>Teléfono</th>
                 <th>Código</th>
                 <th>QR</th>
@@ -76,7 +76,7 @@ if (!isset($_SESSION['nombre'])) {
               </div>
 
               <div class="form-group col-lg-6 col-md-6 col-xs-12">
-                <label>N° Documento:</label>
+                <label>N° Matrícula:</label>
                 <!-- id corregido para coincidir con JS -->
                 <input class="form-control" type="text" name="documento_numero" id="documento_numero" maxlength="70" placeholder="Documento">
               </div>

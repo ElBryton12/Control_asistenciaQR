@@ -264,7 +264,7 @@ $estaLogueado = isset($_SESSION['empleado_id']);
                 <div class="tab-pane fade in active" id="loginTab">
                     <form id="formLogin">
                         <div class="form-group">
-                            <label>Documento</label>
+                            <label>Matrícula</label>
                             <input type="text" name="documento_numero" class="form-control" required>
                         </div>
                         <div class="form-group">
@@ -289,7 +289,7 @@ $estaLogueado = isset($_SESSION['empleado_id']);
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Documento</label>
+                            <label class="form-label">Matrícula</label>
                             <input type="text" name="documento_numero" class="form-control" required>
                         </div>
 
