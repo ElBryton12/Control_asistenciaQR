@@ -8,8 +8,6 @@ $estaLogueado = isset($_SESSION['empleado_id']);
     <meta charset="UTF-8">
     <title>Control Asistencia QR - Portal Empleado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="shortcut icon" href="../public/img/favicon.ico">
     <!-- Bootstrap básico + tu fuente -->
     <link rel="stylesheet" href="admin/public/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
