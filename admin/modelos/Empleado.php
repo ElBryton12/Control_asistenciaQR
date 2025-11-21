@@ -259,6 +259,11 @@ class Empleado
     }
 
 // ...
+    public function cantidad_empleado()
+{
+    $sql = "SELECT COUNT(*) AS total FROM empleados";
+    return ejecutarConsulta($sql);
+}
 
 
     /**

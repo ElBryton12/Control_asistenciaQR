@@ -11,6 +11,13 @@ if (!isset($_SESSION['nombre'])) {
  $usuario = new Usuario();
  $rsptan = $usuario->cantidad_usuario();
  $reg = $rsptan->fetch_object();
+
+
+ // Modelo Empleado SOLO para el contador
+require_once ('../modelos/Empleado.php');
+$empleado = new Empleado();
+$rsptaEmp = $empleado->cantidad_empleado();
+$regEmp = $rsptaEmp->fetch_object();
 ?>
 
 <!--CONTENIDO -->
@@ -52,7 +59,7 @@ if (!isset($_SESSION['nombre'])) {
           </div>
           <div class="stat-content">
             <h3>Empleados</h3>
-            <p>Total: <strong><?php echo $reg->nombre; ?></strong></p>
+            <p>Total: <strong><?php echo $regEmp->total; ?></strong></p>
           </div>
           <div class="stat-arrow">
             <span class="material-symbols-rounded">arrow_forward</span>

@@ -9,9 +9,12 @@ $estaLogueado = isset($_SESSION['empleado_id']);
     <title>Control Asistencia QR - Portal Empleado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="shortcut icon" href="../public/img/favicon.ico">
     <!-- Bootstrap básico + tu fuente -->
     <link rel="stylesheet" href="admin/public/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+
+
 <style>
     body {
         font-family: "Poppins", sans-serif;
@@ -27,13 +30,14 @@ $estaLogueado = isset($_SESSION['empleado_id']);
     }
 
     .portal-card {
-        background: radial-gradient(circle at top left, #ffffff 0, #f7f8ff 35%, #edf2ff 100%);
-        border-radius: 26px;
-        box-shadow: 0 22px 60px rgba(15, 23, 42, 0.16);
-        max-width: 960px;
-        width: 100%;
-        padding: 28px 34px 30px;
-    }
+    background: radial-gradient(circle at top left, #ffffff 0, #f7f8ff 35%, #edf2ff 100%);
+    border-radius: 26px;
+    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.16);
+    max-width: 960px;
+    width: 100%;
+    padding: 28px 34px 30px;
+    position: relative; /* 👈 importante para posicionar el botón admin */
+    }   
 
     .portal-title {
         font-size: 24px;
@@ -46,6 +50,42 @@ $estaLogueado = isset($_SESSION['empleado_id']);
         font-size: 13px;
         color: #6b7280;
         margin-bottom: 22px;
+    }
+
+    /* Botón/Link de acceso admin */
+    .admin-entry {
+        position: absolute;
+        top: 18px;
+        right: 24px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #6b7280;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.02);
+        border: 1px dashed rgba(148, 163, 184, 0.7);
+        opacity: 0.7;
+        transition: all 0.2s ease;
+    }
+
+    .admin-entry-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: #10b981; /* verde discreto */
+    }
+
+    .admin-entry:hover {
+        opacity: 1;
+        background: rgba(37, 99, 235, 0.06);
+        border-style: solid;
+        border-color: rgba(37, 99, 235, 0.55);
+        color: #1f2937;
     }
 
     /* --------- CREDENCIAL QR (modo logueado) --------- */
@@ -199,10 +239,17 @@ $estaLogueado = isset($_SESSION['empleado_id']);
 <div class="portal-container">
     <div class="portal-card">
 
+         <!-- Acceso “escondido” para administrador -->
+        <a href="admin/vistas/login.html" class="admin-entry" title="Acceso administrador">
+            <span class="admin-entry-dot"></span>
+            Admin
+        </a>
+
         <h1 class="portal-title">Sistema de Control de Asistencia QR</h1>
         <p class="portal-subtitle">
             Regístrate o inicia sesión para obtener tu código QR de acceso.
         </p>
+
 
         <?php if (!$estaLogueado): ?>
 
@@ -231,24 +278,31 @@ $estaLogueado = isset($_SESSION['empleado_id']);
                 <!-- REGISTRO -->
                 <div class="tab-pane fade" id="registerTab">
                     <form id="formRegistro">
-                        <div class="form-group">
-                            <label>Nombre</label>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
                             <input type="text" name="nombre" class="form-control" required>
                         </div>
-                        <div class="form-group">
-                            <label>Apellidos</label>
+
+                        <div class="mb-3">
+                            <label class="form-label">Apellidos</label>
                             <input type="text" name="apellidos" class="form-control" required>
                         </div>
-                        <div class="form-group">
-                            <label>Documento</label>
+
+                        <div class="mb-3">
+                            <label class="form-label">Documento</label>
                             <input type="text" name="documento_numero" class="form-control" required>
                         </div>
-                        <div class="form-group">
-                            <label>Teléfono</label>
+
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono</label>
                             <input type="text" name="telefono" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">Registrarme y generar QR</button>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            Crear cuenta y generar QR
+                        </button>
                     </form>
+
                 </div>
             </div>
 
@@ -319,12 +373,12 @@ $estaLogueado = isset($_SESSION['empleado_id']);
 <script src="admin/public/js/jquery-3.1.1.min.js"></script>
 <script src="admin/public/js/bootstrap.min.js"></script>
 <script>
-$(function() {
-    // Login
+$(function () {
+    // LOGIN
     $("#formLogin").on("submit", function(e) {
         e.preventDefault();
         $.post("user/EmpleadoPortal.php?op=login", $(this).serialize(), function(res) {
-            console.log("RESPUESTA LOGIN:", res);   // 👈 LOG IMPORTANTE
+            console.log("RESPUESTA LOGIN:", res);
             let data = {};
             try { data = (typeof res === "string") ? JSON.parse(res) : res; } catch (e) {}
 
@@ -338,24 +392,26 @@ $(function() {
         });
     });
 
-
-    // Registro
+    // REGISTRO
     $("#formRegistro").on("submit", function(e) {
         e.preventDefault();
         $.post("user/EmpleadoPortal.php?op=registrar", $(this).serialize(), function(res) {
+            console.log("RESPUESTA REGISTRO:", res); // 👈 mira esto en la consola
             let data = {};
-            try { data = JSON.parse(res); } catch (e) {}
+            try { data = (typeof res === "string") ? JSON.parse(res) : res; } catch (e) {}
 
             $("#mensaje").removeClass("alert-success alert-danger").show();
             if (data.success) {
                 $("#mensaje").addClass("alert-success").text(data.message);
-                setTimeout(() => location.reload(), 800);
+                setTimeout(() => location.reload(), 800); // recarga para mostrar el QR
             } else {
-                $("#mensaje").addClass("alert-danger").text(data.message || "Error al registrarse.");
+                $("#mensaje").addClass("alert-danger").text(data.message || "No se pudo registrar el empleado.");
             }
         });
     });
 });
 </script>
+
+
 </body>
 </html>

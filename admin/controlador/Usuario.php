@@ -127,12 +127,11 @@ switch ($_GET["op"]) {
         break;
 
     case 'salir':
-        //Limpiamos las variables de sesion
-        session_unset();
-        //Destruimos la sesion
-        session_destroy();
-        //Redirigimos al usuario a la pagina de login
-        header("Location: ../index.php");
-        break;
+    session_unset();
+    session_destroy();
+    header("Location: /Control_asistenciaQR/index.php");
+    exit();
+    break;
+
 }
 ?>

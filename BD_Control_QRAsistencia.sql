@@ -11,7 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -27,8 +26,6 @@ USE `control_asistencia`;
 
 --
 -- Estructura de tabla para la tabla `asistencias`
---
--- Creación: 11-05-2025 a las 05:46:53
 --
 
 CREATE TABLE `asistencias` (
@@ -56,7 +53,7 @@ INSERT INTO `asistencias` (`id`, `empleado_id`, `hora`, `fecha`, `tipo`) VALUES
 --
 -- Estructura de tabla para la tabla `empleados`
 --
--- Creación: 10-05-2025 a las 23:10:30
+-- ACTUALIZADO: Se incluye soporte para QR y ajuste de longitud de código
 --
 
 CREATE TABLE `empleados` (
@@ -65,23 +62,24 @@ CREATE TABLE `empleados` (
   `apellidos` varchar(45) NOT NULL,
   `documento_numero` varchar(45) NOT NULL,
   `telefono` varchar(45) NOT NULL,
-  `codigo` varchar(45) NOT NULL
+  `codigo` varchar(50) DEFAULT NULL, -- Modificado a VARCHAR(50) y permite NULL
+  `imagen_qr` varchar(100) DEFAULT NULL -- Nueva columna agregada
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `empleados`
 --
+-- NOTA: Se agrega NULL al final de los valores para corresponder a la columna imagen_qr
+--
 
-INSERT INTO `empleados` (`id`, `nombre`, `apellidos`, `documento_numero`, `telefono`, `codigo`) VALUES
-(1, 'empleado1', 'perez', '789456124', '999999999', '1234'),
-(2, 'empleado2', 'torres', '369852147', '123456789', '321');
+INSERT INTO `empleados` (`id`, `nombre`, `apellidos`, `documento_numero`, `telefono`, `codigo`, `imagen_qr`) VALUES
+(1, 'empleado1', 'perez', '789456124', '999999999', '1234', NULL),
+(2, 'empleado2', 'torres', '369852147', '123456789', '321', NULL);
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `usuarios`
---
--- Creación: 10-05-2025 a las 22:59:54
 --
 
 CREATE TABLE `usuarios` (
@@ -118,7 +116,8 @@ ALTER TABLE `asistencias`
 -- Indices de la tabla `empleados`
 --
 ALTER TABLE `empleados`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_codigo` (`codigo`); -- Nuevo índice para búsquedas rápidas por código
 
 --
 -- Indices de la tabla `usuarios`

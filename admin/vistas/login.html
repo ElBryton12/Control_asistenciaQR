@@ -11,7 +11,8 @@
 
   <!-- Font Awesome -->
   <link rel="shortcut icon" href="../public/img/favicon.ico">
-  <link rel="stylesheet" href="../public/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../public/css/font-awesome.css">
+
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel="stylesheet" href="../public/CSS_JS/style.css">
@@ -256,12 +257,25 @@
   </div>
 </form>
 
-<!-- Scripts necesarios -->
+<!-- jQuery (primero siempre) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap (CSS + JS) necesarios para que bootbox funcione -->
+<link rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<!-- Bootbox (usa $.fn.modal de Bootstrap) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+
+<!-- Resto de scripts de la animación -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
 <script src="../public/CSS_JS/NextgenmediaSVGPlugin.min_2.js"></script>
 <script src="../public/CSS_JS/script.js"></script>
+
+<!-- Tu lógica de login -->
 <script src="scripts/login.js"></script>
+
 
 
 </body>
