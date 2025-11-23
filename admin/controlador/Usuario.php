@@ -126,12 +126,13 @@ switch ($_GET["op"]) {
         echo json_encode($fetch);
         break;
 
-    case 'salir':
-    session_unset();
-    session_destroy();
-    header("Location: /Control_asistenciaQR/index.php");
-    exit();
-    break;
+        case 'salir':
+        session_unset();
+        session_destroy();
+        header("Location: ../../index.php");
+        exit();
+        break;
+
 
 }
 ?>
