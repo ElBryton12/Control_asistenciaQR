@@ -1,0 +1,2 @@
+#Ignorar los códigos QR generados para que no lo tengan en sus máquinas locales
+admin/files/qrcodes/

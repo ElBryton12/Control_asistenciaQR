@@ -9,7 +9,7 @@ if (!isset($_SESSION['nombre'])) {
  ?>
 
 <!--CONTENIDO -->
-<div class="content-wrapper">
+<div class="main-content content-wrapper">
 
   <!-- Main content -->
   <section class="content">
@@ -25,7 +25,12 @@ if (!isset($_SESSION['nombre'])) {
 
           <!--box-header-->
           <div class="box-header with-border">
-            <h1 class="box-title">Lista de usuarios <button class="btn btn-success"><i class="fa fa-plus-circle"></i> Agregar</button></h1>
+            <h1 class="box-title">
+              Lista de usuarios/Guardias de la empresa
+              <button class="btn btn-success" id="btnagregar" onclick="mostrarform(true)">
+                <i class="fa fa-plus-circle"></i> Agregar
+              </button>
+            </h1>
             <div class="box-tools pull-right">
               
             </div>
@@ -64,7 +69,7 @@ if (!isset($_SESSION['nombre'])) {
           <!--fin tabla para listar datos-->
 
           <!--formulatio para datos-->
-          <div class="panel-body" id="formularioregistro">
+          <div class="panel-body" id="formularioregistro" style="display:none;">
 
           <form action='' name='formulario' id='formulario' method='POST'>
             <div class='form-group col-lg-6 col-md-6 col-xs-12'>
@@ -92,7 +97,7 @@ if (!isset($_SESSION['nombre'])) {
               <label for="">Imagen:</label>
               <input class='form-control filestyle' data-buttonText='Seleccionar foto' type='file' name='imagen' id='imagen'>
               <input type='hidden' name='imagenactual' id='imagenactual'>
-              <img src='' alt='' width='150px' height='120' id='imagenmuestra'>
+              <img src="" alt="Previsualización" id="imagenmuestra" style="display:none;">
             </div>
 
             <div class='form-group col-lg-12 col-md-12 col-sm-12 col-xs-12'>

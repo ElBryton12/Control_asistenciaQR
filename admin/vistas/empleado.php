@@ -8,7 +8,7 @@ if (!isset($_SESSION['nombre'])) {
  ?>
 
 <!--CONTENIDO -->
-<div class="content-wrapper">
+<div class="main-content content-wrapper">
 
   <!-- Main content -->
   <section class="content">

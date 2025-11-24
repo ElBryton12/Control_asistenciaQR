@@ -612,6 +612,17 @@ body.dark-theme .theme-toggle-track .theme-toggle-indicator {
     font-size: 26px;
 }
 
+#imagenmuestra {
+  display: none;                 /* oculta mientras esté vacío */
+  width: 150px;
+  height: 120px;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;    /* marco tipo “placeholder” */
+  background-color: #f9fafb;     /* fondo claro */
+  object-fit: cover;             /* recorta la imagen si no tiene la misma proporción */
+}
+
+
 
 /* Responsive */
 @media (max-width: 768px) {

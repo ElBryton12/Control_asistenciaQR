@@ -11,13 +11,17 @@ if (!isset($_SESSION['nombre'])) {
     header("Location: login.html");
     exit();
 }
+
+// 🔹 Rol del usuario en sesión
+$rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'GUARDIA';  // default GUARDIA
+$esAdmin = ($rol === 'ADMIN');
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Proyecto QR - Sistema de Asistencia</title>
+  <title>Proyecto QR - Panel de Control</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   
   <!-- Google Fonts -->
@@ -87,57 +91,61 @@ if (!isset($_SESSION['nombre'])) {
 
         
         <!-- Menu list -->
-        <ul class="menu-list">
-          <li class="menu-item">
-            <a href="escritorio.php" class="menu-link" data-page="escritorio">
-              <span class="material-symbols-rounded">dashboard</span>
-              <span class="menu-label">Escritorio</span>
-            </a>
-          </li>
-          
-          <li class="menu-item">
-            <a href="asistencia.php" class="menu-link" data-page="asistencia">
-              <span class="material-symbols-rounded">fact_check</span>
-              <span class="menu-label">Asistencias</span>
-            </a>
-          </li>
+      <ul class="menu-list">
+        <!-- TODOS ven esto -->
+        <li class="menu-item">
+          <a href="escritorio.php" class="menu-link" data-page="escritorio">
+            <span class="material-symbols-rounded">dashboard</span>
+            <span class="menu-label">Escritorio</span>
+          </a>
+        </li>
 
-            <!-- 🔹 Nuevo botón para el ESCÁNER -->
-          <li class="menu-item">
-            <a href="../../vistas/asistencia.php" class="menu-link" data-page="scanner">
-              <span class="material-symbols-rounded">qr_code_scanner</span>
-              <span class="menu-label">Escáner</span>
-            </a>
-          </li>
-          
-          <li class="menu-item">
-            <a href="rptasistencia.php" class="menu-link" data-page="rptasistencia">
-              <span class="material-symbols-rounded">insert_chart</span>
-              <span class="menu-label">Reportes</span>
-            </a>
-          </li>
-          
+        <li class="menu-item">
+          <a href="asistencia.php" class="menu-link" data-page="asistencia">
+            <span class="material-symbols-rounded">fact_check</span>
+            <span class="menu-label">Asistencias</span>
+          </a>
+        </li>
+
+        <li class="menu-item">
+          <a href="../../vistas/asistencia.php" class="menu-link" data-page="scanner">
+            <span class="material-symbols-rounded">qr_code_scanner</span>
+            <span class="menu-label">Escáner</span>
+          </a>
+        </li>
+
+        <li class="menu-item">
+          <a href="rptasistencia.php" class="menu-link" data-page="rptasistencia">
+            <span class="material-symbols-rounded">insert_chart</span>
+            <span class="menu-label">Reportes</span>
+          </a>
+        </li>
+
+        <?php if ($esAdmin): ?>
+          <!-- SOLO ADMIN ve esto -->
           <li class="menu-item">
             <a href="empleado.php" class="menu-link" data-page="empleado">
               <span class="material-symbols-rounded">group</span>
               <span class="menu-label">Empleados</span>
             </a>
           </li>
-          
+
           <li class="menu-item">
             <a href="usuario.php" class="menu-link" data-page="usuario">
               <span class="material-symbols-rounded">lock</span>
               <span class="menu-label">Usuarios</span>
             </a>
           </li>
-          
+
           <li class="menu-item">
             <a href="https://github.com/ElBryton12/Control_asistenciaQR" target="_blank" class="menu-link">
               <span class="material-symbols-rounded">code</span>
               <span class="menu-label">GitHub</span>
             </a>
           </li>
-        </ul>
+        <?php endif; ?>
+      </ul>
+
 
         <!-- User Info Section -->
         <div class="sidebar-user-info">
@@ -145,7 +153,9 @@ if (!isset($_SESSION['nombre'])) {
             <img src="../files/usuarios/<?php echo $_SESSION['imagen']; ?>" alt="Usuario" class="user-avatar">
             <div class="user-details">
               <span class="user-name"><?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
-              <span class="user-role">Administrador</span>
+              <span class="user-role">
+                <?php echo $esAdmin ? 'Administrador' : 'Guardia'; ?>
+              </span>
             </div>
           </div>
         </div>

@@ -5,9 +5,9 @@ if (!isset($_SESSION['nombre'])) {
     header("Location: login.html"); 
 } else {
     require 'header.php';
- ?>
+?>
 <!--CONTENIDO -->
-<div class="content-wrapper">
+<div class="main-content content-wrapper">
 
   <!-- Main content -->
   <section class="content">
@@ -59,7 +59,6 @@ if (!isset($_SESSION['nombre'])) {
           </div>
           <!--fin tabla para listar datos-->
 
-
           <!--fin centro-->
 
         </div>
@@ -79,9 +78,9 @@ if (!isset($_SESSION['nombre'])) {
 
 <?php 
 require 'footer.php';
- ?>
+?>
 
- <script src='scripts/asistencia.js'></script>
+<script src='scripts/asistencia.js'></script>
 <?php }
 
 ob_end_flush();

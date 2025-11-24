@@ -13,10 +13,11 @@ class Usuario
     //metodo para insertar un registro
     public function insertar($nombre, $apellidos, $login, $email, $clavehash, $imagen)
     {
-
-        $sql = "INSERT INTO usuarios (nombre,apellidos,login,email,password,imagen,estado) VALUES ('$nombre','$apellidos','$login','$email','$clavehash','$imagen','1')";
+        $sql = "INSERT INTO usuarios (nombre, apellidos, login, email, password, imagen, estado, rol)
+                VALUES ('$nombre', '$apellidos', '$login', '$email', '$clavehash', '$imagen', '1', 'GUARDIA')";
         return ejecutarConsulta($sql);
     }
+
 
     //metodo para editar registros
     public function editar($idusuario, $nombre, $apellidos, $login, $email, $clavehash, $imagen)
@@ -64,8 +65,21 @@ class Usuario
     //metodo para verificar el acceso al sistema
     public function verificar($login, $clave)
     {
-        $sql = "SELECT * FROM usuarios WHERE login='$login' AND password='$clave' AND estado= '1'";
+        $sql = "SELECT 
+                    id       AS idusuario,
+                    nombre,
+                    apellidos,
+                    login,
+                    email,
+                    imagen,
+                    estado,
+                    rol
+                FROM usuarios
+                WHERE login   = '$login'
+                AND password = '$clave'
+                AND estado   = '1'";
         return ejecutarConsulta($sql);
     }
+
     
 }

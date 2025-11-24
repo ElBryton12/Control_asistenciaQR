@@ -105,26 +105,24 @@ switch ($_GET["op"]) {
         echo json_encode($results);
         break;
 
-    case 'verificar':
-        //Validamos si el usuario tiene acceso al sistema
-        $logina = $_POST['logina'];
-        $clavea = $_POST['clavea'];
-        //Hash SHA256 para la contraseña
-        $clavehash = hash("SHA256", $clavea);
-        //Llamamos al metodo verificar de la clase Usuario
-        $rspta = $usuario->verificar($logina, $clavehash);
-        //Obtenemos el resultado como un objeto
-        $fetch = $rspta->fetch_object();
-        //Si existe el usuario, declaramos las variables de sesion
-        if (isset($fetch)) {
-            $_SESSION['idusuario'] = $fetch->idusuario;
-            $_SESSION['nombre'] = $fetch->nombre;
-            $_SESSION['imagen'] = $fetch->imagen;
-            $_SESSION['login'] = $fetch->login;
-        }
-        //Devolvemosel resultado como un objeto JSON
-        echo json_encode($fetch);
-        break;
+        case 'verificar':
+            $logina = $_POST['logina'];
+            $clavea = $_POST['clavea'];
+            $clavehash = hash("SHA256", $clavea);
+
+            $rspta = $usuario->verificar($logina, $clavehash);
+            $fetch = $rspta->fetch_object();
+
+            if (isset($fetch)) {
+                $_SESSION['idusuario'] = $fetch->idusuario;
+                $_SESSION['nombre']    = $fetch->nombre;
+                $_SESSION['imagen']    = $fetch->imagen;
+                $_SESSION['login']     = $fetch->login;
+                $_SESSION['rol']       = $fetch->rol;   // 🔹 clave
+            }
+
+            echo json_encode($fetch);
+            break;
 
         case 'salir':
         session_unset();

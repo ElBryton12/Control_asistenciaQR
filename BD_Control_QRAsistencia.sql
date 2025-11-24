@@ -12,9 +12,9 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+ /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+ /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+ /*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `control_asistencia`
@@ -52,7 +52,6 @@ INSERT INTO `asistencias` (`id`, `empleado_id`, `hora`, `fecha`, `tipo`) VALUES
 
 --
 -- Estructura de tabla para la tabla `empleados`
---
 -- ACTUALIZADO: Se incluye soporte para QR y ajuste de longitud de código
 --
 
@@ -62,14 +61,12 @@ CREATE TABLE `empleados` (
   `apellidos` varchar(45) NOT NULL,
   `documento_numero` varchar(45) NOT NULL,
   `telefono` varchar(45) NOT NULL,
-  `codigo` varchar(50) DEFAULT NULL, -- Modificado a VARCHAR(50) y permite NULL
-  `imagen_qr` varchar(100) DEFAULT NULL -- Nueva columna agregada
+  `codigo` varchar(50) DEFAULT NULL,          -- Modificado a VARCHAR(50) y permite NULL
+  `imagen_qr` varchar(100) DEFAULT NULL       -- Nueva columna agregada
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `empleados`
---
--- NOTA: Se agrega NULL al final de los valores para corresponder a la columna imagen_qr
 --
 
 INSERT INTO `empleados` (`id`, `nombre`, `apellidos`, `documento_numero`, `telefono`, `codigo`, `imagen_qr`) VALUES
@@ -90,20 +87,24 @@ CREATE TABLE `usuarios` (
   `email` varchar(45) NOT NULL,
   `password` varchar(64) NOT NULL,
   `imagen` varchar(64) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
+  `estado` tinyint(4) NOT NULL DEFAULT 1,
+  `rol` enum('ADMIN','GUARDIA') NOT NULL DEFAULT 'GUARDIA'   -- 🔹 Nueva columna
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nombre`, `apellidos`, `login`, `email`, `password`, `imagen`, `estado`) VALUES
-(1, 'admin', 'apellidos', 'admin', 'admin@admin.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', '1746935836.png', 1),
-(2, 'admin editado', 'apellidos', 'admin', 'admin@admin.com', '', '1746935836.png', 0);
+INSERT INTO `usuarios` (`id`, `nombre`, `apellidos`, `login`, `email`, `password`, `imagen`, `estado`, `rol`) VALUES
+(1, 'admin', 'apellidos', 'admin', 'admin@admin.com',
+ '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+ '1746935836.png', 1, 'ADMIN'),
+(2, 'guardia', 'apellidos', 'guardia', 'guardia@admin.com',
+ '', '1746935836.png', 0, 'GUARDIA');
 
---
+-- --------------------------------------------------------
 -- Índices para tablas volcadas
---
+-- --------------------------------------------------------
 
 --
 -- Indices de la tabla `asistencias`
@@ -125,39 +126,28 @@ ALTER TABLE `empleados`
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
---
+-- --------------------------------------------------------
 -- AUTO_INCREMENT de las tablas volcadas
---
+-- --------------------------------------------------------
 
---
--- AUTO_INCREMENT de la tabla `asistencias`
---
 ALTER TABLE `asistencias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
---
--- AUTO_INCREMENT de la tabla `empleados`
---
 ALTER TABLE `empleados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
+-- --------------------------------------------------------
 -- Restricciones para tablas volcadas
---
+-- --------------------------------------------------------
 
---
--- Filtros para la tabla `asistencias`
---
 ALTER TABLE `asistencias`
   ADD CONSTRAINT `asistencias_ibfk_2` FOREIGN KEY (`empleado_id`) REFERENCES `empleados` (`id`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+ /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+ /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
