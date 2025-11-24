@@ -48,8 +48,7 @@ Contiene la librería **phpqrcode**, utilizada para generar automáticamente có
 
 ### 📁 `/admin/files/qrcodes/`  
 📌 **Esta carpeta NO viene en el repositorio.**  
-Debes crearla manualmente:
-/admin/files/qrcodes/
+Debes crearla manualmente
 
 
 Aquí se almacenarán los códigos QR generados para cada empleado.
