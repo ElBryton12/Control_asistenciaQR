@@ -40,8 +40,8 @@ if (!isset($_SESSION['nombre'])) {
 
     <style>
         :root {
-            --primary: #0073b7;   /* azul AdminLTE */
-            --primary-dark: #005b90;
+            --primary: #695CFE;   /* azul AdminLTE */
+            --primary-dark: #695CFE;
             --bg: #f4f6f9;
         }
 
